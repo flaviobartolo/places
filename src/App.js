@@ -6,15 +6,15 @@ import NewPlace from './places/pages/newPlace';
 const App = () => {
   return <Router>
     <Switch>
-        <Route path='/' exact>
-            <Users />
-        </Route>
-        <Route path='/places/new' exact>
-            <NewPlace />
-        </Route>
-        <Redirect to='/' />
+      <Route path='/' exact>
+        <Users />
+      </Route>
+      <Route path='/places/new' exact>
+        <NewPlace />
+      </Route>
+      <Redirect to='/' />
     </Switch>
   </Router>
 }
 
-export default App;
+export default App
