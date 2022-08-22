@@ -20,6 +20,5 @@ const Map = (props) => {
   return <div ref={mapRef} className={`map ${props.className}`} style={props.style}>
   </div>
 }
-// AIzaSyBo9CsPpkrKvYXzFURboNHc_KvzANsbJ_E
-// AIzaSyAG-VYt8f8p-a4SMY0To7fBQJ4q0TJZePM - places
+
 export default Map
