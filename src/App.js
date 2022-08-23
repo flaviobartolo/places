@@ -2,9 +2,10 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom'
 
 import Users from './user/pages/Users'
-import NewPlace from './places/pages/newPlace';
-import UserPlaces from './places/pages/UserPlaces';
-import MainNavigation from './shared/components/Navigation/MainNavigation';
+import NewPlace from './places/pages/NewPlace'
+import UpdatePlace from './places/pages/UpdatePlace'
+import UserPlaces from './places/pages/UserPlaces'
+import MainNavigation from './shared/components/Navigation/MainNavigation'
 
 const App = () => {
   return (
@@ -20,6 +21,9 @@ const App = () => {
           </Route>
           <Route path='/places/new' exact>
             <NewPlace />
+          </Route>
+          <Route path='/places/:placeId'>
+            <UpdatePlace />
           </Route>
           <Redirect to='/' />
         </Switch>
