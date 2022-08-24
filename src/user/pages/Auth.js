@@ -51,7 +51,7 @@ const Auth = () => {
   }
 
   return <Card className='authentication'>
-    <h2>Login required</h2>
+    <h2>{isSignUp ? 'Signup' : 'Login required'}</h2>
     <hr/>
     <form onSubmit={loginHandler}>
       {isSignUp && 
