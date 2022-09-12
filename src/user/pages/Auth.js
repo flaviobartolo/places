@@ -6,13 +6,14 @@ import Button from '../../shared/components/FormElements/Button'
 import { VALIDATOR_MINLENGTH, VALIDATOR_EMAIL, VALIDATOR_REQUIRE } from '../../shared/util/validators'
 import { useForm } from '../../shared/hooks/form-hook'
 import { AuthContext } from '../../shared/context/auth-context'
+import userAxios from '../../axios-instances/user-instance'
+
 
 import './Auth.css'
 
 const Auth = () => {
 
   const auth = useContext(AuthContext)
-
   const [isSignUp, setIsSignUp] = useState(true)
 
   const [formState, inputHandler, setFormData] = useForm({
@@ -25,12 +26,6 @@ const Auth = () => {
       isValid: false
     }
   }, false)
-
-  const loginHandler = (e) => {
-    e.preventDefault()
-    console.log(formState.inputs)
-    auth.login()
-  }
 
   const switchAuthModeHandler = () => {
     if (!isSignUp) {
@@ -54,10 +49,38 @@ const Auth = () => {
     // setIsSignUp((prevMode) => !prevMode) we can do it like this as shown in the lesson
   }
 
+  const authSubmitHandler = async (e) => {
+    e.preventDefault()
+
+    if (!isSignUp) {
+      console.log('login')
+    } else {
+
+      const postData = JSON.stringify({
+        name: formState.inputs.name.value,
+        email: formState.inputs.email.value,
+        password: formState.inputs.password.value
+      })
+      console.log(postData)
+
+      const data = await userAxios.post('signup', postData)
+        .then((response) => {
+          console.log(response.data);
+          auth.login();
+        })
+        .catch((err) => {
+          console.log(err.response.data);
+        });
+    }
+
+    
+    //auth.login()
+  }
+
   return <Card className='authentication'>
     <h2>{isSignUp ? 'Signup' : 'Login required'}</h2>
     <hr/>
-    <form onSubmit={loginHandler}>
+    <form onSubmit={authSubmitHandler}>
       {isSignUp && 
       <Input 
         id='name'
