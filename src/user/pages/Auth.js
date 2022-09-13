@@ -3,6 +3,8 @@ import React, { useState, useContext } from 'react'
 import Card from '../../shared/components/UIElements/Card'
 import Input from '../../shared/components/FormElements/Input'
 import Button from '../../shared/components/FormElements/Button'
+import ErrorModal from '../../shared/components/UIElements/ErrorModal'
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner'
 import { VALIDATOR_MINLENGTH, VALIDATOR_EMAIL, VALIDATOR_REQUIRE } from '../../shared/util/validators'
 import { useForm } from '../../shared/hooks/form-hook'
 import { AuthContext } from '../../shared/context/auth-context'
@@ -15,6 +17,8 @@ const Auth = () => {
 
   const auth = useContext(AuthContext)
   const [isSignUp, setIsSignUp] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState()
 
   const [formState, inputHandler, setFormData] = useForm({
     password: {
@@ -52,7 +56,10 @@ const Auth = () => {
   const authSubmitHandler = async (e) => {
     e.preventDefault()
 
+    setIsLoading(true)
+
     if (!isSignUp) {
+      setIsLoading(false)
       console.log('login')
     } else {
 
@@ -66,18 +73,20 @@ const Auth = () => {
       const data = await userAxios.post('signup', postData)
         .then((response) => {
           console.log(response.data);
+          setIsLoading(false)
           auth.login();
         })
         .catch((err) => {
           console.log(err.response.data);
+          setIsLoading(false)
+          setError(err.message || 'Something went wrong, please try again.')
         });
     }
 
-    
-    //auth.login()
   }
 
   return <Card className='authentication'>
+    {isLoading && <LoadingSpinner asOverlay />}
     <h2>{isSignUp ? 'Signup' : 'Login required'}</h2>
     <hr/>
     <form onSubmit={authSubmitHandler}>
