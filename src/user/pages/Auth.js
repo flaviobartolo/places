@@ -59,7 +59,6 @@ const Auth = () => {
     setIsLoading(true)
 
     if (!isSignUp) {
-      console.log('login')
 
       const postData = JSON.stringify({
         email: formState.inputs.email.value,
@@ -67,9 +66,10 @@ const Auth = () => {
       })
 
       userAxios.post('login', postData)
-        .then((res) => {
+        .then((response) => {
+          console.log(response.data.user)
           setIsLoading(false)
-          auth.login()
+          auth.login(response.data.user.id)
         })
         .catch((err) => {
           setIsLoading(false)
@@ -87,7 +87,7 @@ const Auth = () => {
       await userAxios.post('signup', postData)
         .then((response) => {
           setIsLoading(false)
-          auth.login();
+          auth.login(response.data.user.id);
         })
         .catch((err) => {
           setIsLoading(false)
