@@ -79,53 +79,63 @@ const Auth = () => {
         .catch((err) => {
           console.log(err.response.data);
           setIsLoading(false)
-          setError(err.message || 'Something went wrong, please try again.')
+          console.log(err.message)
+          setError(err.response.data.message || 'Something went wrong, please try again.')
         });
     }
 
   }
 
-  return <Card className='authentication'>
-    {isLoading && <LoadingSpinner asOverlay />}
-    <h2>{isSignUp ? 'Signup' : 'Login required'}</h2>
-    <hr/>
-    <form onSubmit={authSubmitHandler}>
-      {isSignUp && 
-      <Input 
-        id='name'
-        type='text' 
-        element='input' 
-        validators={[VALIDATOR_REQUIRE()]}
-        placeholder='Define your username'
-        label='Your Name'
-        errorText='Please enter a name.'
-        onInput={inputHandler}
-      />
-      }
-      <Input 
-        id='email'
-        type='email' 
-        element='input' 
-        validators={[VALIDATOR_EMAIL()]}
-        placeholder='Define your email'
-        label='EMAIL'
-        errorText='Please enter a valid email.'
-        onInput={inputHandler}
-      />
-      <Input 
-        id='password'
-        type='password' 
-        element='input' 
-        validators={[VALIDATOR_MINLENGTH(5)]}
-        placeholder='Define your password'
-        label='PASSWORD'
-        errorText='Your password must be longer than 5 characters.'
-        onInput={inputHandler}
-      />
-      <Button disabled={!formState.isValid} type='submit'>{!isSignUp ? 'LOGIN' : 'SIGNUP'}</Button>
-    </form>
-    <Button inverse onClick={switchAuthModeHandler} >{isSignUp ? 'SWITCH TO LOGIN' : 'SWITCH TO SIGNUP'}</Button>
-  </Card>
+  const errorHandler = () => {
+    setError(null)
+  }
+
+  return (
+    <>
+      <ErrorModal error={error}  onClear={errorHandler} />
+      <Card className='authentication'>
+        {isLoading && <LoadingSpinner asOverlay />}
+        <h2>{isSignUp ? 'Signup' : 'Login required'}</h2>
+        <hr/>
+        <form onSubmit={authSubmitHandler}>
+          {isSignUp && 
+          <Input 
+            id='name'
+            type='text' 
+            element='input' 
+            validators={[VALIDATOR_REQUIRE()]}
+            placeholder='Define your username'
+            label='Your Name'
+            errorText='Please enter a name.'
+            onInput={inputHandler}
+          />
+          }
+          <Input 
+            id='email'
+            type='email' 
+            element='input' 
+            validators={[VALIDATOR_EMAIL()]}
+            placeholder='Define your email'
+            label='EMAIL'
+            errorText='Please enter a valid email.'
+            onInput={inputHandler}
+          />
+          <Input 
+            id='password'
+            type='password' 
+            element='input' 
+            validators={[VALIDATOR_MINLENGTH(5)]}
+            placeholder='Define your password'
+            label='PASSWORD'
+            errorText='Your password must be longer than 5 characters.'
+            onInput={inputHandler}
+          />
+          <Button disabled={!formState.isValid} type='submit'>{!isSignUp ? 'LOGIN' : 'SIGNUP'}</Button>
+        </form>
+        <Button inverse onClick={switchAuthModeHandler} >{isSignUp ? 'SWITCH TO LOGIN' : 'SWITCH TO SIGNUP'}</Button>
+      </Card>
+    </>
+  )
 }
 
 export default Auth
