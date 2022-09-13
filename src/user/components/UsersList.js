@@ -18,9 +18,9 @@ const UsersList = (props) => {
       <UserItem 
         key={user.id} 
         id={user.id}
-        image={user.image}
+        image={user.image || 'https://hostpapasupport.com/knowledgebase/wp-content/uploads/2018/04/1-13.png'}
         name={user.name}
-        placeCount={user.places}
+        placeCount={user.places.length}
       />
     ))}
   </ul>
