@@ -59,8 +59,23 @@ const Auth = () => {
     setIsLoading(true)
 
     if (!isSignUp) {
-      setIsLoading(false)
       console.log('login')
+
+      const postData = JSON.stringify({
+        email: formState.inputs.email.value,
+        password: formState.inputs.password.value
+      })
+
+      userAxios.post('login', postData)
+        .then((res) => {
+          setIsLoading(false)
+          auth.login()
+        })
+        .catch((err) => {
+          setIsLoading(false)
+          setError(err.response.data.message || 'Something went wrong, please try again.')
+        }) 
+
     } else {
 
       const postData = JSON.stringify({
@@ -68,18 +83,14 @@ const Auth = () => {
         email: formState.inputs.email.value,
         password: formState.inputs.password.value
       })
-      console.log(postData)
 
-      const data = await userAxios.post('signup', postData)
+      await userAxios.post('signup', postData)
         .then((response) => {
-          console.log(response.data);
           setIsLoading(false)
           auth.login();
         })
         .catch((err) => {
-          console.log(err.response.data);
           setIsLoading(false)
-          console.log(err.message)
           setError(err.response.data.message || 'Something went wrong, please try again.')
         });
     }
