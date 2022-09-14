@@ -91,12 +91,12 @@ const Auth = () => {
   }, [user, isSuccess, dispatch])
 
   const errorHandler = () => {
-    setError(null)
+    dispatch(reset())
   }
 
   return (
     <>
-      <ErrorModal error={error}  onClear={errorHandler} />
+      <ErrorModal error={isError && message}  onClear={errorHandler} />
       <Card className='authentication'>
         {isLoading && <LoadingSpinner asOverlay />}
         <h2>{isSignUp ? 'Signup' : 'Login required'}</h2>
