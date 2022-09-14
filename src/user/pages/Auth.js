@@ -17,9 +17,6 @@ const Auth = () => {
 
   const auth = useContext(AuthContext)
   const [isSignUp, setIsSignUp] = useState(true)
-  //const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState()
-
   const {user, isLoading, isError, isSuccess, message} = useSelector((state) => state.auth)
   const dispatch = useDispatch()
 
@@ -56,10 +53,15 @@ const Auth = () => {
     // setIsSignUp((prevMode) => !prevMode) we can do it like this as shown in the lesson
   }
 
+  useEffect(() => {
+    if (isSuccess) {
+      auth.login(user.id)
+      dispatch(reset())
+    }
+  }, [user, isSuccess, dispatch])
+
   const authSubmitHandler = async (e) => {
     e.preventDefault()
-
-    //setIsLoading(true)
 
     if (!isSignUp) {
 
@@ -82,13 +84,6 @@ const Auth = () => {
     }
 
   }
-
-  useEffect(() => {
-    if (isSuccess) {
-      auth.login(user.id)
-      dispatch(reset())
-    }
-  }, [user, isSuccess, dispatch])
 
   const errorHandler = () => {
     dispatch(reset())
