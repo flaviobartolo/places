@@ -1,4 +1,5 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 
 import Card from '../../shared/components/UIElements/Card'
 import Input from '../../shared/components/FormElements/Input'
@@ -8,8 +9,7 @@ import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner'
 import { VALIDATOR_MINLENGTH, VALIDATOR_EMAIL, VALIDATOR_REQUIRE } from '../../shared/util/validators'
 import { useForm } from '../../shared/hooks/form-hook'
 import { AuthContext } from '../../shared/context/auth-context'
-import userAxios from '../../axios-instances/user-instance'
-
+import { createUser, loginUser, reset } from '../../features/auth/authSlice'
 
 import './Auth.css'
 
@@ -17,8 +17,11 @@ const Auth = () => {
 
   const auth = useContext(AuthContext)
   const [isSignUp, setIsSignUp] = useState(true)
-  const [isLoading, setIsLoading] = useState(false)
+  //const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState()
+
+  const {user, isLoading, isError, isSuccess, message} = useSelector((state) => state.auth)
+  const dispatch = useDispatch()
 
   const [formState, inputHandler, setFormData] = useForm({
     password: {
@@ -56,7 +59,7 @@ const Auth = () => {
   const authSubmitHandler = async (e) => {
     e.preventDefault()
 
-    setIsLoading(true)
+    //setIsLoading(true)
 
     if (!isSignUp) {
 
@@ -64,17 +67,8 @@ const Auth = () => {
         email: formState.inputs.email.value,
         password: formState.inputs.password.value
       })
-
-      userAxios.post('login', postData)
-        .then((response) => {
-          console.log(response.data.user)
-          setIsLoading(false)
-          auth.login(response.data.user.id)
-        })
-        .catch((err) => {
-          setIsLoading(false)
-          setError(err.response.data.message || 'Something went wrong, please try again.')
-        }) 
+      console.log('login')
+      dispatch(loginUser(postData))
 
     } else {
 
@@ -83,19 +77,18 @@ const Auth = () => {
         email: formState.inputs.email.value,
         password: formState.inputs.password.value
       })
-
-      await userAxios.post('signup', postData)
-        .then((response) => {
-          setIsLoading(false)
-          auth.login(response.data.user.id);
-        })
-        .catch((err) => {
-          setIsLoading(false)
-          setError(err.response.data.message || 'Something went wrong, please try again.')
-        });
+      console.log('registo')
+      dispatch(createUser(postData))
     }
 
   }
+
+  useEffect(() => {
+    if (isSuccess) {
+      auth.login(user.id)
+      dispatch(reset())
+    }
+  }, [user, isSuccess, dispatch])
 
   const errorHandler = () => {
     setError(null)

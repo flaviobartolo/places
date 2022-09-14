@@ -1,7 +1,7 @@
 import userAxios from '../../axios-instances/user-instance'
 
 
-const getUsers = async (data) => {
+const getUsers = async () => {
   const response = await userAxios.get('/')
   return response.data.users
 }
