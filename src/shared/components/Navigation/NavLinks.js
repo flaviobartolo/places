@@ -2,7 +2,7 @@ import React from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { logoutUser, reset, logoutInitialState } from '../../../features/auth/authSlice'
+import { logoutUser } from '../../../features/auth/authSlice'
 import './NavLinks.css'
 
 const NavLinks = () => {

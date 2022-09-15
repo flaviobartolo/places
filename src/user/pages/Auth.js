@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import Card from '../../shared/components/UIElements/Card'
@@ -15,9 +15,8 @@ import './Auth.css'
 
 const Auth = () => {
 
-  const auth = useContext(AuthContext)
-  const [isSignUp, setIsSignUp] = useState(true)
-  const {user, isLoading, isError, isSuccess, message} = useSelector((state) => state.auth)
+  const [isSignUp, setIsSignUp] = useState(false)
+  const { isLoading, isError, message} = useSelector((state) => state.auth)
   const dispatch = useDispatch()
 
   const [formState, inputHandler, setFormData] = useForm({

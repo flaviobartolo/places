@@ -16,6 +16,7 @@ const App = () => {
   const { user } = useSelector((state) => state.auth)
 
   console.log(isLoggedIn)
+  //console.log(localStorage.getItem('user'))
 
   const login = useCallback((uid) => {
     setIsLoggedIn(true)
