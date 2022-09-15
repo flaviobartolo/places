@@ -47,18 +47,11 @@ const Auth = () => {
         ...formState.inputs,
         name: undefined
       }, formState.inputs.email.isValid && formState.inputs.password.isValid)
-      console.log(formState)
     }
     isSignUp ? setIsSignUp(false) : setIsSignUp(true)
     // setIsSignUp((prevMode) => !prevMode) we can do it like this as shown in the lesson
   }
 
-  useEffect(() => {
-    if (isSuccess) {
-      auth.login(user.id)
-      dispatch(reset())
-    }
-  }, [user, isSuccess, dispatch])
 
   const authSubmitHandler = async (e) => {
     e.preventDefault()

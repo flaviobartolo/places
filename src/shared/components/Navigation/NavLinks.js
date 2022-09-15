@@ -1,34 +1,43 @@
-import React, { useContext } from 'react'
-import { NavLink } from 'react-router-dom'
+import React from 'react'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
 
-import { AuthContext } from '../../context/auth-context'
+import { logoutUser, reset, logoutInitialState } from '../../../features/auth/authSlice'
 import './NavLinks.css'
 
-const NavLinks = (props) => {
+const NavLinks = () => {
 
-  const auth = useContext(AuthContext)
-  console.log(auth)
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const { user } = useSelector((state) => state.auth)
+
+  const logoutHandler = async () => {
+    dispatch(logoutUser())
+    console.log(user)
+    navigate('/')
+  }
+
   return <ul className="nav-links">
     <li>
       <NavLink to='/'>ALL USERS</NavLink>
     </li>
-    {auth.isLoggedIn && (
+    {user && (
     <li>
       <NavLink to='/u1/places'>MY PLACES</NavLink>
     </li>
     )}
-    {auth.isLoggedIn && (
+    {user && (
     <li>
       <NavLink to='/places/new'>ADD PLACE</NavLink>
     </li>
     )}
-    {!auth.isLoggedIn && (
+    {!user && (
     <li>
       <NavLink to='/auth'>AUTHENTICATE</NavLink>
     </li>
     )}
-    {auth.isLoggedIn && (
-      <button onClick={auth.logout}>LOGOUT</button>
+    {user && (
+      <button onClick={logoutHandler}>LOGOUT</button>
     )}
   </ul>
 }

@@ -1,6 +1,7 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
-
+import { useSelector } from 'react-redux'
+ 
 import Users from './user/pages/Users'
 import Auth from './user/pages/Auth'
 import NewPlace from './places/pages/NewPlace'
@@ -12,6 +13,9 @@ import { AuthContext } from './shared/context/auth-context'
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [userId, setUserId] = useState(false)
+  const { user } = useSelector((state) => state.auth)
+
+  console.log(isLoggedIn)
 
   const login = useCallback((uid) => {
     setIsLoggedIn(true)
@@ -25,7 +29,7 @@ const App = () => {
 
   let routes
 
-  if (isLoggedIn){
+  if (user){
     routes = (
         <Routes>
           <Route path='/' element={<Users />} />
