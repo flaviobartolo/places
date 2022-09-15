@@ -3,7 +3,6 @@ import authService from './authService'
 
 
 const loggedUser = JSON.parse(localStorage.getItem('user'))
-console.log(loggedUser)
 
 const initialState = {
   user: loggedUser ? loggedUser : null,
@@ -18,14 +17,7 @@ export const createUser = createAsyncThunk('signup/', async (postData, thunkAPI)
   try {
     const response = await authService.createUser(postData)
     return response
-/*     
-    if (!response.ok) {
-      console.log(response.data)
-      return thunkAPI.rejectWithValue(response.data.message)
-    }
-    return thunkAPI.fulfillWithValue(response.data) */
   } catch (error) {
-    console.log(error)
     const payload = {
       message: error.response.data.message || error.message || 'Something went wrong.',
       errors: error.response.data ? error.response.data.errors : []
@@ -37,10 +29,8 @@ export const createUser = createAsyncThunk('signup/', async (postData, thunkAPI)
 export const loginUser = createAsyncThunk('login/', async (postData, thunkAPI) => {
   try {
     const response = await authService.loginUser(postData)
-    console.log(response)
     return response
   } catch (error) {
-    console.log(error)
     const payload = {
       message: error.response.data.message || error.message || 'Something went wrong.',
       errors: error.response.data ? error.response.data.errors : []
@@ -50,10 +40,7 @@ export const loginUser = createAsyncThunk('login/', async (postData, thunkAPI) =
 })
 
 export const logoutUser = createAsyncThunk('logout/', async (user, ) => {
-  console.log('entrou logout slice')
-  console.log(initialState)
-  console.log(localStorage.getItem('user'))
-  await authService.logoutUser()
+  authService.logoutUser()
 })
 
 export const authSlice = createSlice({
@@ -68,7 +55,6 @@ export const authSlice = createSlice({
         state.isLoading = true
       })
       .addCase(createUser.fulfilled, (state, action) => {
-        console.log(action.payload)
         state.isLoading = false
         state.isSuccess = true
         state.user = action.payload.user
@@ -84,13 +70,11 @@ export const authSlice = createSlice({
         state.isLoading = true
       })
       .addCase(loginUser.fulfilled, (state, action) => {
-        console.log(action.payload)
         state.isLoading = false
         state.isSuccess = true
         state.user = action.payload.user
       })
       .addCase(loginUser.rejected, (state, action) => {
-        console.log(action.payload)
         state.isLoading = false
         state.isError = true
         state.errors = action.payload.errors

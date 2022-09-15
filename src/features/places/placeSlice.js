@@ -13,7 +13,7 @@ const initialState = {
 }
 
 
-const createPlace = createAsyncThunk('/places', async (postData, thunkAPI) => {
+export const createPlace = createAsyncThunk('/places', async (postData, thunkAPI) => {
   await placeService.createPlace(postData)
 })
 
