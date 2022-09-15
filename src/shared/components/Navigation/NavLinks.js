@@ -13,7 +13,6 @@ const NavLinks = () => {
 
   const logoutHandler = async () => {
     dispatch(logoutUser())
-    console.log(user)
     navigate('/')
   }
 

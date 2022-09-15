@@ -14,7 +14,15 @@ const initialState = {
 
 
 export const createPlace = createAsyncThunk('/places', async (postData, thunkAPI) => {
-  await placeService.createPlace(postData)
+  try {
+    return await placeService.createPlace(postData)
+  } catch (error) {
+    const payload = {
+      message: error.response.data.message || error.message || 'Something went wrong.',
+      errors: error.response.data ? error.response.data.errors : []
+    }
+    return thunkAPI.rejectWithValue(payload)
+  }
 })
 
 
@@ -30,12 +38,12 @@ export const placeSlice = createSlice({
         state.isLoading = true
       })
       .addCase(createPlace.fulfilled, (state, action) => {
-        state = initialState
+        Object.assign(state, initialState) // set the current state equal to the inital state
         state.isSuccess = true
         state.place = action.payload
       })
       .addCase(createPlace.rejected, (state, action) => {
-        state = initialState
+        Object.assign(state, initialState)  
         state.isError = true
         state.errors = action.payload.errors
         state.message = action.payload.message

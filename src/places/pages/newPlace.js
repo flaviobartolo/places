@@ -1,7 +1,9 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
 
 import placesAxios from '../../axios-instances/places-instance'
+import { createPlace, reset } from '../../features/places/placeSlice'
 import Input from '../../shared/components/FormElements/Input'
 import Button from '../../shared/components/FormElements/Button'
 import { VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from '../../shared/util/validators'
@@ -16,8 +18,12 @@ const NewPlace = () => {
 
   const navigate = useNavigate()
   const auth = useContext(AuthContext)
-  const [isLoading, setIsLoading] = useState(false)
+  //const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState()
+
+  const { isSuccess, isLoading, isError, message } = useSelector((state) => state.places)
+  const { user } = useSelector((state) => state.auth)
+  const dispatch = useDispatch()
 
   const [formState, InputHandler] = useForm(
     {
@@ -39,41 +45,33 @@ const NewPlace = () => {
 
   const placeSubmitHandler = async (e) => {
     e.preventDefault()
-    setIsLoading(true)
+    //setIsLoading(true)
     const postData = {
       title: formState.inputs.title.value,
       description: formState.inputs.description.value,
       address: formState.inputs.address.value,
-      creator: auth.userId
+      creator: user.id
     }
+    
+    dispatch(createPlace(postData))
+
     console.log(postData)
-
-    await placesAxios.post('/', postData)
-      .then((response) => {
-        navigate('/')
-      })
-      .catch((err) => {
-        console.log(err)
-        setError(err.response.data.message || 'Something went wrong')
-        console.log(error)
-        console.log(err.response.data.message)
-      })
-      .finally(() => {
-        console.log(error)
-      })
-
-    setIsLoading(false)
-
   }
 
   const errorHandler = () => {
-    setError(null)
+    dispatch(reset())
   }
+
+  useEffect(() => {
+    if (isSuccess){
+      navigate('/')
+    }
+  }, [isSuccess, navigate])
 
   return (
   <>
     {isLoading && <LoadingSpinner asOverlay />}
-    <ErrorModal error={error}  onClear={errorHandler} />
+    <ErrorModal error={isError && message}  onClear={errorHandler} />
     <form className='place-form' onSubmit={placeSubmitHandler}>
       <Input 
         id='title'
