@@ -12,7 +12,7 @@ const PlaceList = (props) => {
     return <div className="place-list center">
       <Card>
         <h2>No places found. Maybe create one?</h2>
-        <Button to='/places/new' >Share Place</Button>
+        <Button to='/places/new' >New Place</Button>
       </Card>
     </div>
   }
@@ -22,7 +22,7 @@ const PlaceList = (props) => {
       <PlaceItem 
         key={place.id} 
         id={place.id} 
-        image={place.imageUrl}
+        image={place.imageUrl || 'https://litoralmagazine.com/wp-content/uploads/2021/03/Aveiro-20090923-6937-XL-1000x600.jpg'}
         title={place.title}
         description={place.description}
         address={place.address}
