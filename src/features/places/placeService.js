@@ -7,8 +7,15 @@ const createPlace = async (data) => {
   return response.data.place
 }
 
+const getPlacesByUser = async (userId) => {
+  const response = await placesAxios.get(`/user/${userId}`)
+  return response.data.places
+}
+
+
 const placeService = {
   createPlace,
+  getPlacesByUser
 }
 
 export default placeService

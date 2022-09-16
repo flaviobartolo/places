@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { getPlacesByUser } from '../../features/places/placeSlice'
 
 import PlaceList from '../components/PlaceList'
 
@@ -35,9 +37,17 @@ const UserPlaces = () => {
 
   const params = useParams()
   const userId = params.userId
-  const loadedPlaces = DUMMY_PLACES.filter((place) => place.creator === userId)
+  const dispatch = useDispatch()
+  const {places, isError, errors, isLoading, message} = useSelector((state) => state.places)
 
-  return <PlaceList items={loadedPlaces} />
+  useEffect(() => {
+    console.log(userId)
+    dispatch(getPlacesByUser(userId))
+  }, [dispatch, userId])
+
+  console.log(places)
+
+  return <PlaceList items={DUMMY_PLACES} />
 }
 
 export default UserPlaces

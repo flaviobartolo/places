@@ -1,0 +1,1 @@
+export const ERROR_REQUEST_FAILED = 'Something went wrong, please try again.'
