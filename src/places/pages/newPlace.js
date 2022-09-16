@@ -1,14 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 
-import placesAxios from '../../axios-instances/places-instance'
 import { createPlace, reset } from '../../features/places/placeSlice'
 import Input from '../../shared/components/FormElements/Input'
 import Button from '../../shared/components/FormElements/Button'
 import { VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from '../../shared/util/validators'
 import { useForm } from '../../shared/hooks/form-hook'
-import { AuthContext } from '../../shared/context/auth-context'
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner'
 import ErrorModal from '../../shared/components/UIElements/ErrorModal'
 
@@ -17,10 +15,6 @@ import './PlaceForm.css'
 const NewPlace = () => {
 
   const navigate = useNavigate()
-  const auth = useContext(AuthContext)
-  //const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState()
-
   const { isSuccess, isLoading, isError, message } = useSelector((state) => state.places)
   const { user } = useSelector((state) => state.auth)
   const dispatch = useDispatch()
@@ -45,17 +39,14 @@ const NewPlace = () => {
 
   const placeSubmitHandler = async (e) => {
     e.preventDefault()
-    //setIsLoading(true)
     const postData = {
       title: formState.inputs.title.value,
       description: formState.inputs.description.value,
       address: formState.inputs.address.value,
       creator: user.id
     }
-    
+  
     dispatch(createPlace(postData))
-
-    console.log(postData)
   }
 
   const errorHandler = () => {

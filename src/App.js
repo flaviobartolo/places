@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
  
@@ -14,9 +14,6 @@ const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [userId, setUserId] = useState(false)
   const { user } = useSelector((state) => state.auth)
-
-  console.log(isLoggedIn)
-  //console.log(localStorage.getItem('user'))
 
   const login = useCallback((uid) => {
     setIsLoggedIn(true)

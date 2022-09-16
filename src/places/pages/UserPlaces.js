@@ -13,7 +13,7 @@ const UserPlaces = () => {
   const params = useParams()
   const userId = params.userId
   const dispatch = useDispatch()
-  const {places, isError, errors, isLoading, message} = useSelector((state) => state.places)
+  const {places, isError, isLoading, message} = useSelector((state) => state.places)
 
   useEffect(() => {
     dispatch(getPlacesByUser(userId))
