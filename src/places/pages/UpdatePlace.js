@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
 
+import { getPlaceById, reset } from '../../features/places/placeSlice'
 import Input from '../../shared/components/FormElements/Input'
 import Button from '../../shared/components/FormElements/Button'
 import Card from '../../shared/components/UIElements/Card'
 import {VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH} from '../../shared/util/validators'
 import { useForm } from '../../shared/hooks/form-hook'
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner'
+import ErrorModal from '../../shared/components/UIElements/ErrorModal'
+
 
 import './PlaceForm.css'
 
@@ -37,10 +42,19 @@ const DUMMY_PLACES = [
   }
 ]
 
+
+
 const UpdatePlace = () => {
+
+  const { isSuccess, isError, message, isLoading, place } = useSelector((state) => state.places)
+  const { user } = useSelector((state) => state.auth)
+  const dispatch = useDispatch()
   const params = useParams()
   const placeId = params.placeId
-  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    dispatch(getPlaceById(placeId))
+  }, [dispatch, placeId])
 
   const [formState, InputHandler, setFormData] = useForm(
     {
@@ -56,31 +70,32 @@ const UpdatePlace = () => {
     true
   )
 
-  const identifiedPlace = DUMMY_PLACES.find((place) => place.id === placeId)
+  //const identifiedPlace = DUMMY_PLACES.find((place) => place.id === placeId)
   
   useEffect(() => {
-    if(identifiedPlace){
+    if(isSuccess && place){
+      console.log(place.title)
       setFormData({
         title: {
-          value: identifiedPlace.title,
+          value: place.title,
           isValid: true
         },
         description: {
-          value: identifiedPlace.description,
+          value: place.description,
           isValid: true
         }
       }, 
       true)
+      console.log(formState)
     }
-    setIsLoading(false)
-  }, [setFormData, identifiedPlace])
+  }, [setFormData, place])
 
   const submitHandler = (e) => {
     e.preventDefault()
     console.log(formState.inputs)
   }
 
-  if (!identifiedPlace) {
+  if (!place) {
     return <div className="center">
         <Card>
           <h2>Could not find that place!</h2>

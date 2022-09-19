@@ -13,7 +13,6 @@ import ErrorModal from '../../shared/components/UIElements/ErrorModal'
 import './PlaceForm.css'
 
 const NewPlace = () => {
-
   const navigate = useNavigate()
   const { isSuccess, isLoading, isError, message } = useSelector((state) => state.places)
   const { user } = useSelector((state) => state.auth)
@@ -57,7 +56,8 @@ const NewPlace = () => {
     if (isSuccess){
       navigate('/')
     }
-  }, [isSuccess, navigate])
+  }, [navigate, isSuccess])
+
 
   return (
   <>

@@ -40,6 +40,20 @@ export const getPlacesByUser = createAsyncThunk('/user/places', async (userId, t
   }
 })
 
+export const getPlaceById = createAsyncThunk('/placeByID', async (placeId, thunkAPI) => {
+  try {
+    console.log(placeId)
+    return await placeService.getPlaceById(placeId)
+  } catch (error) {
+    console.log(error)
+    const payload = {
+      message: error.response.data.message || error.message || ERROR_REQUEST_FAILED,
+      errors: error.response.data ? error.response.data.errors : []
+    }
+    return thunkAPI.rejectWithValue(payload)
+  }
+})
+
 
 export const placeSlice = createSlice({
   name: 'place',
@@ -68,10 +82,23 @@ export const placeSlice = createSlice({
       })
       .addCase(getPlacesByUser.fulfilled, (state, action) => {
         Object.assign(state, initialState)
-        state.isSuccess = true
         state.places = action.payload
       })
       .addCase(getPlacesByUser.rejected, (state, action) => {
+        Object.assign(state, initialState)  
+        state.isError = true
+        state.errors = action.payload.errors
+        state.message = action.payload.message
+      })
+      .addCase(getPlaceById.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(getPlaceById.fulfilled, (state, action) => {
+        Object.assign(state, initialState)
+        state.isSuccess = true
+        state.place = action.payload
+      })
+      .addCase(getPlaceById.rejected, (state, action) => {
         Object.assign(state, initialState)  
         state.isError = true
         state.errors = action.payload.errors

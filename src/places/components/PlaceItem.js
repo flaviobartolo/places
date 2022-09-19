@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react'
+import { useSelector } from 'react-redux'
 
 import Card from '../../shared/components/UIElements/Card'
 import Button from '../../shared/components/FormElements/Button'
@@ -9,6 +10,8 @@ import { AuthContext } from '../../shared/context/auth-context'
 import './PlaceItem.css'
 
 const PlaceItem = (props) => {
+  const { user } = useSelector((state) => state.auth)
+  console.log(user)
   const auth = useContext(AuthContext)
   const [showMap, setShowMap] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)

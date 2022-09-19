@@ -9,13 +9,20 @@ const createPlace = async (data) => {
 
 const getPlacesByUser = async (userId) => {
   const response = await placesAxios.get(`/user/${userId}`)
+  console.log(response)
   return response.data.places
+}
+
+const getPlaceById = async (placeId) => {
+  const response = await placesAxios.get(`/${placeId}`)
+  return response.data.place
 }
 
 
 const placeService = {
   createPlace,
-  getPlacesByUser
+  getPlacesByUser,
+  getPlaceById
 }
 
 export default placeService
