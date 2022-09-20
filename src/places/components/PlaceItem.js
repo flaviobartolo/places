@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 
+import { deletePlace } from '../../features/places/placeSlice'
 import Card from '../../shared/components/UIElements/Card'
 import Button from '../../shared/components/FormElements/Button'
 import Modal from '../../shared/components/UIElements/Modal'
@@ -10,8 +11,10 @@ import './PlaceItem.css'
 
 const PlaceItem = (props) => {
   const { user } = useSelector((state) => state.auth)
+  const { isSuccess } = useSelector((state) => state.places)
   const [showMap, setShowMap] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const dispatch = useDispatch()
 
   const toggleShowMapHandler = () => {
     showMap ? setShowMap(false) : setShowMap(true)
@@ -22,8 +25,8 @@ const PlaceItem = (props) => {
   }
 
   const confirmDeleteHandler = () => {
-    console.log('DUMMY MSG - DELETING THIS PLACE')
-    setShowDeleteModal(false)
+    console.log(props)
+    console.log('DELETE')
   }
 
   return <>

@@ -38,6 +38,19 @@ export const updatePlace = createAsyncThunk('/updatePlaces', async ({postData, p
   }
 })
 
+export const deletePlace = createAsyncThunk('/deletePlace', async (placeId, thunkAPI) => {
+  try {
+    const response = await placeService.deletePlace(placeId)
+    console.log(response)
+  } catch (error) {
+    const payload = {
+      message: error.response.data.message || error.message || ERROR_REQUEST_FAILED,
+      errors: error.response.data ? error.response.data.errors : []
+    }
+    return thunkAPI.rejectWithValue(payload)
+  }
+})
+
 export const getPlacesByUser = createAsyncThunk('/user/places', async (userId, thunkAPI) => {
   try {
     return await placeService.getPlacesByUser(userId)
@@ -129,6 +142,17 @@ export const placeSlice = createSlice({
         state.isError = true
         state.errors = action.payload.errors
         state.message = action.payload.message
+      })
+      .addCase(deletePlace.pending, (state) => {
+        Object.assign(state, initialState)
+        state.isLoading = true
+      })
+      .addCase(deletePlace.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+      })
+      .addCase(deletePlace.rejected, (state, action) => {
+        state.isError = true
       })
   }
 })

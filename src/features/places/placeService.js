@@ -13,6 +13,12 @@ const updatePlace = async (data, placeId) => {
   return response.data.place
 }
 
+const deletePlace = async (placeId) => {
+  const response = await placesAxios.delete(`/${placeId}`)
+  console.log(response)
+  return response
+}
+
 const getPlacesByUser = async (userId) => {
   const response = await placesAxios.get(`/user/${userId}`)
   console.log(response)
@@ -28,6 +34,7 @@ const getPlaceById = async (placeId) => {
 const placeService = {
   createPlace,
   updatePlace,
+  deletePlace,
   getPlacesByUser,
   getPlaceById
 }
