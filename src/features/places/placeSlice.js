@@ -54,10 +54,12 @@ export const getPlaceById = createAsyncThunk('/placeByID', async (placeId, thunk
   try {
     return await placeService.getPlaceById(placeId)
   } catch (error) {
+    console.log(error)
     const payload = {
       message: error.response.data.message || error.message || ERROR_REQUEST_FAILED,
-      errors: error.response.data ? error.response.data.errors : []
+      errors: error.response.data.errors || []
     }
+    console.log(payload)
     return thunkAPI.rejectWithValue(payload)
   }
 })
@@ -107,12 +109,14 @@ export const placeSlice = createSlice({
         state.place = action.payload
       })
       .addCase(getPlaceById.rejected, (state, action) => {
+        console.log(state.payload)
         Object.assign(state, initialState)  
         state.isError = true
         state.errors = action.payload.errors
         state.message = action.payload.message
       })
       .addCase(updatePlace.pending, (state) => {
+        Object.assign(state, initialState)
         state.isLoading = true
       })
       .addCase(updatePlace.fulfilled, (state, action) => {

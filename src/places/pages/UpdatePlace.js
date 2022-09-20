@@ -15,7 +15,6 @@ import './PlaceForm.css'
 
 
 const UpdatePlace = () => {
-
   const { isSuccess, isError, message, isLoading, place } = useSelector((state) => state.places)
   const { user } = useSelector((state) => state.auth)
   const dispatch = useDispatch()
@@ -38,53 +37,51 @@ const UpdatePlace = () => {
   )
 
   useEffect(() => {
-    dispatch(getPlaceById(placeId))
-    if(isSuccess){
-      console.log(place)
-      setFormData({
-        title: {
-          value: place.title,
-          isValid: true
-        },
-        description: {
-          value: place.description,
-          isValid: true
-        }
-      }, 
-      true)
+    try {
+      dispatch(getPlaceById(placeId)).unwrap()
+      if(isSuccess){
+        setFormData({
+          title: {
+            value: place.title,
+            isValid: true
+          },
+          description: {
+            value: place.description,
+            isValid: true
+          }
+        }, 
+        true) 
+      }
+    } catch (err) {
+      console.log(err)
     }
-  }, [placeId, isSuccess, setFormData])
+  }, [dispatch, isSuccess])
 
-
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault()
 
-    const updateUser = async () => {
+    try {
       const postData = {
         title: formState.inputs.title.value,
         description: formState.inputs.description.value
       }
-      dispatch(updatePlace({postData, placeId: placeId}))
-    }
-
-    try {
-      updateUser()
-      if(isSuccess){
-        dispatch(reset())
+      await dispatch(updatePlace({postData, placeId})).unwrap()
+      if (isSuccess){
         navigate(`/${user.id}/places`)
       }
+
     } catch (error) {
       console.log(error)
-      navigate('/')
     }
   }
 
   const errorHandler = () => {
     dispatch(reset())
+    navigate(`/${user.id}/places`)
   }
 
 
-  if (!place) {
+  if (isError) {
     return (
       <>
       {isError && <ErrorModal error={message} onClear={errorHandler} />}
@@ -102,8 +99,6 @@ const UpdatePlace = () => {
   }
 
   return(
-    <> 
-      {isError && <ErrorModal error={message} onClear={errorHandler} />}
       <form className='place-form' onSubmit={submitHandler}>
         <Input 
           id='title'
@@ -128,7 +123,6 @@ const UpdatePlace = () => {
         />
         <Button  type='submit' disabled={!formState.isValid}>UPDATE PLACE</Button>
       </form>
-    </>
   ) 
 }
 
