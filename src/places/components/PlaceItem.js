@@ -68,10 +68,10 @@ const PlaceItem = (props) => {
           </div>
           <div className="place-item__actions">
             <Button inverse onClick={toggleShowMapHandler}>VIEW ON MAP</Button>
-            {auth.isLoggedIn &&
+            {(user && user.id === props.creatorId) &&
               <Button to={`/places/${props.id}`}>EDIT</Button>
             }
-            {auth.isLoggedIn &&
+            {(user && user.id === props.creatorId) &&
               <Button danger onClick={toggleShowDeleteModalHandler}>DELETE</Button>
             }
           </div>
