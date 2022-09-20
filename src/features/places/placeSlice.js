@@ -4,7 +4,7 @@ import placeService from './placeService'
 import { ERROR_REQUEST_FAILED } from '../../shared/util/default_text'
 
 const initialState = {
-  place: {},
+  place: null,
   places: [],
   isError: false,
   errors: [],
@@ -26,12 +26,22 @@ export const createPlace = createAsyncThunk('/places', async (postData, thunkAPI
   }
 })
 
+export const updatePlace = createAsyncThunk('/updatePlaces', async ({postData, placeId}, thunkAPI) => {
+  try {
+    return await placeService.updatePlace(postData, placeId)
+  } catch (error) {
+    const payload = {
+      message: error.response.data.message || error.message || ERROR_REQUEST_FAILED,
+      errors: error.response.data ? error.response.data.errors : []
+    }
+    return thunkAPI.rejectWithValue(payload)
+  }
+})
+
 export const getPlacesByUser = createAsyncThunk('/user/places', async (userId, thunkAPI) => {
   try {
-    console.log(userId)
     return await placeService.getPlacesByUser(userId)
   } catch (error) {
-    console.log(error)
     const payload = {
       message: error.response.data.message || error.message || ERROR_REQUEST_FAILED,
       errors: error.response.data ? error.response.data.errors : []
@@ -42,10 +52,8 @@ export const getPlacesByUser = createAsyncThunk('/user/places', async (userId, t
 
 export const getPlaceById = createAsyncThunk('/placeByID', async (placeId, thunkAPI) => {
   try {
-    console.log(placeId)
     return await placeService.getPlaceById(placeId)
   } catch (error) {
-    console.log(error)
     const payload = {
       message: error.response.data.message || error.message || ERROR_REQUEST_FAILED,
       errors: error.response.data ? error.response.data.errors : []
@@ -99,6 +107,20 @@ export const placeSlice = createSlice({
         state.place = action.payload
       })
       .addCase(getPlaceById.rejected, (state, action) => {
+        Object.assign(state, initialState)  
+        state.isError = true
+        state.errors = action.payload.errors
+        state.message = action.payload.message
+      })
+      .addCase(updatePlace.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(updatePlace.fulfilled, (state, action) => {
+        Object.assign(state, initialState)
+        state.isSuccess = true
+        state.place = action.payload
+      })
+      .addCase(updatePlace.rejected, (state, action) => {
         Object.assign(state, initialState)  
         state.isError = true
         state.errors = action.payload.errors
