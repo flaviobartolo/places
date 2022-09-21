@@ -25,8 +25,14 @@ const PlaceItem = (props) => {
   }
 
   const confirmDeleteHandler = () => {
-    console.log(props)
-    console.log('DELETE')
+     try {
+      dispatch(deletePlace(props.id)).unwrap()
+      props.onDelete(props.id)
+    } catch (error) {
+      console.log(error)
+    }  
+    //props.onDelete(props.id)
+    toggleShowDeleteModalHandler()
   }
 
   return <>

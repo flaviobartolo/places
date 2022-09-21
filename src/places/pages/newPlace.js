@@ -54,6 +54,7 @@ const NewPlace = () => {
 
   useEffect(() => {
     if (isSuccess){
+      dispatch(reset())
       navigate('/')
     }
   }, [navigate, isSuccess])

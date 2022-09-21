@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { getPlacesByUser, reset } from '../../features/places/placeSlice'
+import { getPlacesByUser, reset, resetWithData, removePlace } from '../../features/places/placeSlice'
 
 import PlaceList from '../components/PlaceList'
 import ErrorModal from '../../shared/components/UIElements/ErrorModal'
@@ -20,14 +20,18 @@ const UserPlaces = () => {
   }, [dispatch, userId])
 
   const errorHandler = () => {
-    dispatch(reset())
+    dispatch(resetWithData())
+  }
+
+  const placeDeleteHandler = (removePlaceId) => {
+    dispatch(removePlace({removePlaceId}))
   }
 
   return (
     <>
       <ErrorModal error={isError && message}  onClear={errorHandler} />
-      {isLoading && <LoadingSpinner asOverlay />}
-      {(!isLoading && !isError) && <PlaceList items={places} /> }
+      {isLoading && <div className='center'><LoadingSpinner asOverlay /></div>}
+      {(!isLoading && !isError) && <PlaceList items={places} onDeletePlace={placeDeleteHandler} /> }
     </>
   )
 }

@@ -16,7 +16,7 @@ const updatePlace = async (data, placeId) => {
 const deletePlace = async (placeId) => {
   const response = await placesAxios.delete(`/${placeId}`)
   console.log(response)
-  return response
+  return response.data
 }
 
 const getPlacesByUser = async (userId) => {

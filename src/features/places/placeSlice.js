@@ -40,7 +40,7 @@ export const updatePlace = createAsyncThunk('/updatePlaces', async ({postData, p
 
 export const deletePlace = createAsyncThunk('/deletePlace', async (placeId, thunkAPI) => {
   try {
-    const response = await placeService.deletePlace(placeId)
+    const response = await placeService.deletePlace(placeId).data
     console.log(response)
   } catch (error) {
     const payload = {
@@ -82,7 +82,16 @@ export const placeSlice = createSlice({
   name: 'place',
   initialState,
   reducers: {
-    reset: (state) => initialState
+    reset: (state) => initialState,
+    resetWithData: (state) => {
+      state.isError = false
+      state.isSuccess = false
+      state.errors = []
+      state.message = ''
+    },
+    removePlace: (state, action) => {
+      state.places = state.places.filter((place) => place.id !== action.payload.removePlaceId)
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -144,7 +153,6 @@ export const placeSlice = createSlice({
         state.message = action.payload.message
       })
       .addCase(deletePlace.pending, (state) => {
-        Object.assign(state, initialState)
         state.isLoading = true
       })
       .addCase(deletePlace.fulfilled, (state, action) => {
@@ -152,11 +160,14 @@ export const placeSlice = createSlice({
         state.isSuccess = true
       })
       .addCase(deletePlace.rejected, (state, action) => {
+        state.isLoading = false
         state.isError = true
+        state.errors = action.payload.errors
+        state.message = action.payload.message
       })
   }
 })
 
 
-export const {reset} = placeSlice.actions
+export const {reset, resetWithData, removePlace} = placeSlice.actions
 export default placeSlice.reducer
