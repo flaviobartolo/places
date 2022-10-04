@@ -114,7 +114,7 @@ const Auth = () => {
             id='password'
             type='password' 
             element='input' 
-            validators={[VALIDATOR_MINLENGTH(5)]}
+            validators={[VALIDATOR_MINLENGTH(6)]}
             placeholder='Define your password'
             label='PASSWORD'
             errorText='Your password must be longer than 5 characters.'
