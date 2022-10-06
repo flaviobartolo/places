@@ -5,9 +5,9 @@
     "[javascript]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
+    "prettier.singleQuote": true,
     "emmet.includeLanguages": {
-        "javascript": "javascriptreact"
-      },
+      "javascript": "javascriptreact"
+    },
     "emmet.triggerExpansionOnTab": true,
-    "prettier.singleQuote": true
 }

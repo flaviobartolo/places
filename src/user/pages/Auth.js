@@ -9,6 +9,7 @@ import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner'
 import { VALIDATOR_MINLENGTH, VALIDATOR_EMAIL, VALIDATOR_REQUIRE } from '../../shared/util/validators'
 import { useForm } from '../../shared/hooks/form-hook'
 import { createUser, loginUser, reset } from '../../features/auth/authSlice'
+import { ImageUpload } from '../../shared/components/FormElements/ImageUpload'
 
 import './Auth.css'
 
@@ -37,13 +38,18 @@ const Auth = () => {
         name: {
           value: '',
           isValid: false
+        },
+        image: {
+          value: null,
+          isValid: false
         }
       }, false)
     } else {
       console.log('login')
       setFormData({
         ...formState.inputs,
-        name: undefined
+        name: undefined,
+        image: undefined
       }, formState.inputs.email.isValid && formState.inputs.password.isValid)
     }
     isSignUp ? setIsSignUp(false) : setIsSignUp(true)
@@ -52,6 +58,7 @@ const Auth = () => {
 
 
   const authSubmitHandler = async (e) => {
+    console.log(formState.inputs)
     e.preventDefault()
 
     if (!isSignUp) {
@@ -89,6 +96,7 @@ const Auth = () => {
         <hr/>
         <form onSubmit={authSubmitHandler}>
           {isSignUp && 
+          (<>
           <Input 
             id='name'
             type='text' 
@@ -99,6 +107,8 @@ const Auth = () => {
             errorText='Please enter a name.'
             onInput={inputHandler}
           />
+          <ImageUpload center id='image' onInput={inputHandler} />
+          </>)
           }
           <Input 
             id='email'
