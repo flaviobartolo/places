@@ -71,14 +71,20 @@ const Auth = () => {
       dispatch(loginUser(postData))
 
     } else {
-
+      const formData = new FormData()
+      formData.append('name', formState.inputs.name.value)
+      formData.append('email', formState.inputs.email.value)
+      formData.append('password', formState.inputs.password.value)
+      formData.append('image', formState.inputs.image.value)
+      /*
       const postData = JSON.stringify({
         name: formState.inputs.name.value,
         email: formState.inputs.email.value,
         password: formState.inputs.password.value
       })
+      */
       console.log('registo')
-      dispatch(createUser(postData))
+      dispatch(createUser(formData))
     }
 
   }
