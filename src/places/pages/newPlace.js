@@ -9,6 +9,7 @@ import { VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from '../../shared/util/valida
 import { useForm } from '../../shared/hooks/form-hook'
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner'
 import ErrorModal from '../../shared/components/UIElements/ErrorModal'
+import { ImageUpload } from '../../shared/components/FormElements/ImageUpload'
 
 import './PlaceForm.css'
 
@@ -31,6 +32,10 @@ const NewPlace = () => {
       address: {
         value: '',
         isValid: false
+      },
+      image: {
+        value: null,
+        isValid: false
       }
     }, 
     false
@@ -38,14 +43,21 @@ const NewPlace = () => {
 
   const placeSubmitHandler = async (e) => {
     e.preventDefault()
+    const formData = new FormData()
+    formData.append('title', formState.inputs.title.value)
+    formData.append('description', formState.inputs.description.value)
+    formData.append('address', formState.inputs.address.value)
+    formData.append('creator', user.id)
+    formData.append('image', formState.inputs.image.value)
+    /*
     const postData = {
       title: formState.inputs.title.value,
       description: formState.inputs.description.value,
       address: formState.inputs.address.value,
       creator: user.id
     }
-  
-    dispatch(createPlace(postData))
+    */
+    dispatch(createPlace(formData))
   }
 
   const errorHandler = () => {
@@ -92,6 +104,7 @@ const NewPlace = () => {
         errorText='Please enter a valid address.'
         onInput={InputHandler}
       />
+      <ImageUpload center id='image' onInput={InputHandler} errorText='Please provide an image.' />
       <Button type='submit' disabled={!formState.isValid}>ADD PLACE</Button>
     </form>
   </>
