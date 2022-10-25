@@ -11,8 +11,9 @@ const createUser = async (data) => {
 
 const loginUser = async (data) => {
   const response = await userAxios.post('login', data)
-  if (response.data.user) {
-    localStorage.setItem('user', JSON.stringify(response.data.user))
+  console.log(response)
+  if (response.data.token) {
+    localStorage.setItem('user', JSON.stringify(response.data))
   }
   return response.data
 }
