@@ -3,8 +3,8 @@ import userAxios from '../../axios-instances/user-instance'
 
 const createUser = async (data) => {
   const response = await userAxios.post('signup', data)
-  if (response.data.user) {
-    localStorage.setItem('user', JSON.stringify(response.data.user))
+  if (response.data.token) {
+    localStorage.setItem('user', JSON.stringify(response.data))
   }
   return response.data
 }

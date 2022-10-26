@@ -1,14 +1,14 @@
 import placesAxios from '../../axios-instances/places-instance'
 
-let loggedUser = JSON.parse(localStorage.getItem('user'))
-
 const createPlace = async (data) => {
+  const loggedUser = JSON.parse(localStorage.getItem('user'))
   placesAxios.defaults.headers['Authorization'] = 'Bearer ' + loggedUser.token
   const response = await placesAxios.post('/', data)
   return response.data.place
 }
 
 const updatePlace = async (data, placeId) => {
+  const loggedUser = JSON.parse(localStorage.getItem('user'))
   placesAxios.defaults.headers['Authorization'] = 'Bearer ' + loggedUser.token
   const response = await placesAxios.patch(`/${placeId}`, data)
   console.log(response)
@@ -16,6 +16,7 @@ const updatePlace = async (data, placeId) => {
 }
 
 const deletePlace = async (placeId) => {
+  const loggedUser = JSON.parse(localStorage.getItem('user'))
   placesAxios.defaults.headers['Authorization'] = 'Bearer ' + loggedUser.token
   const response = await placesAxios.delete(`/${placeId}`)
   console.log(response)
