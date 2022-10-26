@@ -22,7 +22,7 @@ const NavLinks = () => {
     </li>
     {user && (
     <li>
-      <NavLink to={`/${user.id}/places`}>MY PLACES</NavLink>
+      <NavLink to={`/${user.userId}/places`}>MY PLACES</NavLink>
     </li>
     )}
     {user && (

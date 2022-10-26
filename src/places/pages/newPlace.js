@@ -47,7 +47,7 @@ const NewPlace = () => {
     formData.append('title', formState.inputs.title.value)
     formData.append('description', formState.inputs.description.value)
     formData.append('address', formState.inputs.address.value)
-    formData.append('creator', user.id)
+    formData.append('creator', user.userId)
     formData.append('image', formState.inputs.image.value)
     /*
     const postData = {
