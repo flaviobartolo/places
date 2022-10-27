@@ -1,14 +1,27 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
  
+import LoadingSpinner from './shared/components/UIElements/LoadingSpinner';
 import Users from './user/pages/Users'
-import Auth from './user/pages/Auth'
-import NewPlace from './places/pages/NewPlace'
-import UpdatePlace from './places/pages/UpdatePlace'
-import UserPlaces from './places/pages/UserPlaces'
+//import Auth from './user/pages/Auth'
+//import NewPlace from './places/pages/NewPlace'
+//import UpdatePlace from './places/pages/UpdatePlace'
+//import UserPlaces from './places/pages/UserPlaces'
 import MainNavigation from './shared/components/Navigation/MainNavigation'
 import { AuthContext } from './shared/context/auth-context'
+
+
+/* lazy loading - loads the components only when needed instead of loading them all as a bundle
+    "The major benefit of React lazy load is performance. Loading less JavaScript code to the browser will reduce DOM load time and boost the performance of our application. Users are able to access a web page even if everything has not been loaded."
+    https://reactjs.org/docs/code-splitting.html
+*/
+const Auth = React.lazy(() => import('./user/pages/Auth'))
+const NewPlace = React.lazy(() => import('./places/pages/NewPlace'))
+const UpdatePlace = React.lazy(() => import('./places/pages/UpdatePlace'))
+const UserPlaces = React.lazy(() => import('./places/pages/UserPlaces'))
+
+/* Finish lazyload vars */
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -53,7 +66,7 @@ const App = () => {
       <Router>
         <MainNavigation />
         <main>
-           {routes}
+          <Suspense fallback={<div className='center'><LoadingSpinner /></div>}>{routes}</Suspense>
         </main>
       </Router>
     </AuthContext.Provider>
